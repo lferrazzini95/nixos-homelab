@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: radarr
+  name: prowlarr
   namespace: argocd
 spec:
   project: default
@@ -12,17 +12,11 @@ spec:
     helm:
       values: |
         image:
-          name: linuxserver/radarr
+          name: linuxserver/prowlarr
           tag: latest
 
         ports:
-          webui: 7878
-
-        pvcMounts:
-        - name: media-library-pvc
-          path: movies
-        - name: media-library-pvc
-          path: /Downloads/complete
+          webui: 9696
 
         storage:
           configSize: 5Gi

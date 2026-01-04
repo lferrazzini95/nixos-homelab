@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: radarr
+  name: sabnzbd
   namespace: argocd
 spec:
   project: default
@@ -12,20 +12,25 @@ spec:
     helm:
       values: |
         image:
-          name: linuxserver/radarr
+          name: linuxserver/sabnzbd
           tag: latest
 
         ports:
-          webui: 7878
-
-        pvcMounts:
-        - name: media-library-pvc
-          path: movies
-        - name: media-library-pvc
-          path: /Downloads/complete
+          webui: 8080
 
         storage:
-          configSize: 5Gi
+          configSize: 25Gi
+          media:
+            name: media-library-pvc
+            path: tvshows
+        resources:
+          limits:
+            memory: 4096Mi
+            cpu: 4
+          requests:
+            memory: 512Mi
+            cpu: 500m
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: media
