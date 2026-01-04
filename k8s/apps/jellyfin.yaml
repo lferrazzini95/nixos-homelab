@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/lferrazzini95/jellyfin-helm.git'
+    targetRevision: HEAD
+    path: .
+    helm:
+      values: |
+        storage:
+          configSize: 50Gi
+          mediaPVC: media-library-pvc
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: media
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
