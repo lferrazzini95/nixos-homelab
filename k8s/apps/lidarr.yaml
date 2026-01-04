@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sabnzbd
+  name: lidarr
   namespace: argocd
 spec:
   project: default
@@ -12,26 +12,19 @@ spec:
     helm:
       values: |
         image:
-          name: linuxserver/sabnzbd
+          name: linuxserver/lidarr
           tag: latest
 
         ports:
-          webui: 8080
+          webui: 8686
 
         mounts:
         - pvcName: media-library-pvc
-          mountName: media-library-downloads
-          path: media/Downloads
+          mountName: media-library-media
+          path: media
 
         storage:
-          config:
-            size: 25Gi
-
-        resources:
-          limits:
-            memory: 12Gi
-            cpu: 4
-
+          configSize: 5Gi
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: media

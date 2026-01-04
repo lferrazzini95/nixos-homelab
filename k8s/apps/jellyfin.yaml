@@ -13,7 +13,22 @@ spec:
       values: |
         storage:
           configSize: 50Gi
-          mediaPVC: media-library-pvc
+
+        resources:
+          limits:
+            memory: 12Gi
+            cpu: 1
+            gpu.intel.com/i915: 1
+          requests:
+            memory: 1Gi
+            cpu: 200m
+            gpu.intel.com/i915: 1
+
+        mounts:
+        - pvcName: media-library-pvc
+          mountName: media-library-media
+          path: media
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: media

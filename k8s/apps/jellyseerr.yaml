@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sabnzbd
+  name: jellyseerr
   namespace: argocd
 spec:
   project: default
@@ -12,26 +12,16 @@ spec:
     helm:
       values: |
         image:
-          name: linuxserver/sabnzbd
+          name: fallenbagel/jellyseerr
           tag: latest
 
         ports:
-          webui: 8080
-
-        mounts:
-        - pvcName: media-library-pvc
-          mountName: media-library-downloads
-          path: media/Downloads
+          webui: 5055
 
         storage:
           config:
-            size: 25Gi
-
-        resources:
-          limits:
-            memory: 12Gi
-            cpu: 4
-
+            size: 5Gi
+            path: /app/config
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: media

@@ -18,11 +18,10 @@ spec:
         ports:
           webui: 7878
 
-        pvcMounts:
-        - name: media-library-pvc
-          path: movies
-        - name: media-library-pvc
-          path: /Downloads/complete
+        mounts:
+        - pvcName: media-library-pvc
+          mountName: media-library-media
+          path: media
 
         storage:
           configSize: 5Gi
