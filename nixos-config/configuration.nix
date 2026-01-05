@@ -39,6 +39,7 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
+     mergerfs
      neovim
      wget
   ];
@@ -51,6 +52,35 @@
   };
   };
 
+  # Mount Disk A (7.3T)
+  fileSystems."/mnt/sda" = {
+    device = "/dev/disk/by-uuid/6a5b51de-de08-47b3-af68-0a000ebeb118";
+    fsType = "ext4";
+  };
+
+  # Mount Disk B (14.6T)
+  fileSystems."/mnt/sdb" = {
+    device = "/dev/disk/by-uuid/4f4195f9-3493-46a2-8400-27f968925c8d";
+    fsType = "ext4";
+  };
+
+  # Create the MergerFS Pool
+  fileSystems."/mnt/harddrive" = {
+    device = "/mnt/sda:/mnt/sdb";
+    fsType = "fuse.mergerfs";
+    options = [
+      "defaults"
+      "allow_other"
+      "use_ino"
+      "cache.files=off"
+      "dropcacheonclose=true"
+      "category.create=mfs"
+    ];
+    depends = [ "/mnt/sda" "/mnt/sdb" ];
+  };
+  systemd.tmpfiles.rules = [
+  "Z /mnt/harddrive/media 0777 luca users - -"
+];
   # Open ports in the firewall.
   networking.firewall = {
     enable = true;
